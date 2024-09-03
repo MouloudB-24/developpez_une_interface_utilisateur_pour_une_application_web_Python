@@ -1,0 +1,152 @@
+
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1100px;
+    margin: auto;
+    padding: 0px;
+}
+
+header {
+    display: flex;
+    border: 1px solid black;
+    max-height: 50px;
+    align-items: center; /* Centre verticale */
+    background-color: #61787F;
+    padding: 30px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre pour un léger relief */
+    position: relative;
+}
+
+.logo {
+    position: absolute;
+}
+
+.logo img {
+    width: 30%;
+    height: auto;
+}
+
+.title {
+    flex: 1; /* Prend tout l'espace restant */
+    text-align: center;
+    font-size: 30px;
+    color: white;
+}
+
+
+/* Container du meilleur film */
+.meilleur-film {
+    display: flex;
+    align-items: center;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+
+/* Style de l'image du meilleur film */
+.affiche-du-film {
+    border-radius: 5px;
+    margin-right: 25px;
+    width: 25%;
+    height: auto;
+}
+
+ /* Conteneur de détails du film */
+ .details-film {
+    flex: 1; /* Le conteneur de détails occupe le reste de l'espace disponible */
+  }
+
+/* Style pour le titre du film */
+.details-film h2 {
+    margin: 0 0 10px 0; /* Marges pour le titre */
+  }
+
+ /* Style pour le texte de description */
+ .details-film p {
+    margin: 0 0 15px 0; /* Marges pour le paragraphe */
+  }
+  
+  /* Style pour le bouton de détails */
+  .details-bouton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background-color: red;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  /* Changement de l'opacité du bouton au survol */
+  .details-bouton:hover {
+    opacity: 0.8;
+  }
+
+
+ /* Style du titre des sections */
+h1 {
+    font-size: 40px;
+    margin-bottom: 20px;
+    font-weight: bold; 
+}
+
+/* Style pour chaque section */
+section {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+
+    overflow: auto;
+}
+
+/* Style pour la grille de films */
+.grille-film {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+/* Style pour chaque carte de film */
+.affiche-film-mieux-note {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    height: 350px;
+}
+
+/* Limiter la taille des images et conserver le ratio */
+.affiche-film-mieux-note img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Rempli le conteneur tout en gardant le ratio */
+    display: block;
+    border-radius: 10px;
+}
+
+/* Superposition pour les détails */
+.overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    color: white;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.affiche-film-mieux-note:hover .overlay {
+    opacity: 1;
+}
+
+.overlay p {
+    font-size: 18px;
+    margin: 0 0 10px 0;
+}
