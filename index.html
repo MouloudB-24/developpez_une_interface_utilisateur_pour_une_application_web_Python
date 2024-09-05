@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>JustStreamIt</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
@@ -11,219 +11,42 @@
             <img src="https://user.oc-static.com/upload/2020/09/18/16004298163529_P5.png" alt="Logo JustStreamIt">
         </div>
         <div class="title">
-            <p>Vidéos à la demande </p>
+            <h1>Vidéos à la demande </h1>
         </div> 
     </header>
     <main>
         <section>
-            <h1>Meilleur film</h1>
-            <div class="meilleur-film">
-                <img src="https://s3-alpha-sig.figma.com/img/2f11/8a88/cda890ff7339f640d0d4737fe894abed?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Mr7IVmF1ypjDjM74ovLNZ3uZwnmLajrzz5wA7fzAv3cYyeMM3RmF0mcFecCNtcB4BF6tfHSMEiPr3BXM2AervscSd7pbZ24pjHUrYT0MxjQvPglaXo486OLtFdEtaZCqgd60bzOrUjRMHoSK6Cy5PLj1LrlbVEbVEXG8KvaNc95Asq5gzk8jwdksZRdFcsce4KdnzukH0vZbrpCFlOfA8YPTHkY8GzCYNwHTXg3gZKRYKnBv5U0rAlibMhTLG8Raxaa7jTwYrclPoukANupo-tBxDpnHnqfG16PiKt0It8JZ6pFCGkKiGL3j8nHewfoOXlkp-v9~TgNp54yJG7gy7Q__" alt="Twelve apostles - Australie" class="affiche-du-film">
-                <div class="details-film">
-                    <h2>The Big Lebowski</h2>
-                    <p >Jeff "The Dude" Lebowski, mistaken for a millionaire of the same name, seeks restitution for his ruined rug and enlists his bowling buddies to help get it.</p>
-                    <button class="details-bouton">Détails</button>
-                </div>
-            </div>
-            
+            <h2>Meilleur film</h2>
+            <div class="best-movie"></div>
         </section>
-    
-        <section >
-            <h1>Films les mieux notés</h1>
-            <div class="grille-film">
-                <div class="affiche-film-mieux-note">
-                    <img src="images/alien.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div> 
-                <div class="affiche-film-mieux-note">
-                    <img src="images/Titanic.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div> 
-        
-                <div class="affiche-film-mieux-note">
-                    <img src="images/scarface.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div>
-                <div class="affiche-film-mieux-note">
-                    <img src="images/pulpfiction.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div> 
-                <div class="affiche-film-mieux-note">
-                    <img src="images/Titanic.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div>
-                <div class="affiche-film-mieux-note">
-                    <img src="images/godfather.jpeg" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div>
-            </div>
+        <!-- Section pour les six films les mieux notés -->
+        <section id="top-movies">
+            <h2>Top 6 Films</h2>
+            <div id="top-movies-container" class="movies-grid"></div>
         </section>
-        <section >
-            <h1>Catégorie 1</h1>
-            <div class="grille-film">
-                <div class="affiche-film-mieux-note">
-                    <img src="images/alien.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div> 
-                <div class="affiche-film-mieux-note">
-                    <img src="images/Titanic.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div> 
-        
-                <div class="affiche-film-mieux-note">
-                    <img src="images/scarface.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div>
-                <div class="affiche-film-mieux-note">
-                    <img src="images/pulpfiction.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div> 
-                <div class="affiche-film-mieux-note">
-                    <img src="images/Titanic.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div>
-                <div class="affiche-film-mieux-note">
-                    <img src="images/godfather.jpeg" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div>
-            </div>
+        <section id="action-movies">
+            <h2>Actions</h2>
+            <div id="action-movies-container" class="movies-grid"></div>
         </section>
-        <section >
-            <h1>Catégorie 2</h1>
-            <div class="grille-film">
-                <div class="affiche-film-mieux-note">
-                    <img src="images/alien.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div> 
-                <div class="affiche-film-mieux-note">
-                    <img src="images/Titanic.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div> 
-        
-                <div class="affiche-film-mieux-note">
-                    <img src="images/scarface.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div>
-                <div class="affiche-film-mieux-note">
-                    <img src="images/pulpfiction.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div> 
-                <div class="affiche-film-mieux-note">
-                    <img src="images/Titanic.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div>
-                <div class="affiche-film-mieux-note">
-                    <img src="images/godfather.jpeg" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section >
-            <h1>Catégorie libre</h1>
-            <div class="grille-film">
-                <div class="affiche-film-mieux-note">
-                    <img src="images/alien.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div> 
-                <div class="affiche-film-mieux-note">
-                    <img src="images/Titanic.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div> 
-        
-                <div class="affiche-film-mieux-note">
-                    <img src="images/scarface.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div>
-                <div class="affiche-film-mieux-note">
-                    <img src="images/pulpfiction.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div> 
-                <div class="affiche-film-mieux-note">
-                    <img src="images/Titanic.png" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div>
-                <div class="affiche-film-mieux-note">
-                    <img src="images/godfather.jpeg" alt="Titanic">
-                    <div class="overlay">
-                        <p>Alien</p>
-                        <button class="details-bouton">Détails</button>
-                    </div>
-                </div>
+        <section id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <img src="" alt="Affiche du film" class="modal-affiche">
+                <h2 class="modal-title"></h2>
+                <p><strong>Genre:</strong> <span class="modal-genres"></span></p>
+                <p><strong>Date de sortie:</strong> <span class="modal-date"></span></p>
+                <p><strong>Classification:</strong> <span class="modal-rated"></span></p>
+                <p><strong>Score IMDB:</strong> <span class="modal-imdb"></span></p>
+                <p><strong>Réalisateur:</strong> <span class="modal-directors"></span></p>
+                <p><strong>Acteurs:</strong> <span class="modal-actors"></span></p>
+                <p><strong>Durée:</strong> <span class="modal-duration"></span> minutes</p>
+                <p><strong>Pays d'origine:</strong> <span class="modal-country"></span></p>
+                <p><strong>Recettes au box-office:</strong> <span class="modal-box-office"></span></p>
+                <p><strong>Résumé:</strong> <span class="modal-description"></span></p>
             </div>
         </section>
     </main>
-    <footer>
-
-    </footer>
-
+    <!-- Liens vers le script JavaScript -->
+     <script src="script.js"></script>
 </body>
 </html>
