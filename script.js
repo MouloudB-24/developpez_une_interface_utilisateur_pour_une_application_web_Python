@@ -75,7 +75,7 @@ const topMoviesContainer = document.getElementById('top-movies-container');
 let movieDataArr = [];
 
 // Fonction pour faire les requêtes vers l'API 
-async function fetchActionMovies() {
+async function fetchTopMovies() {
     try {
         let response = await fetch(API_URL_TOP_MOVIE);
         let data = await response.json();
@@ -168,6 +168,6 @@ async function showActionMovieDetails(filmId) {
 }
 
 // Charger les six premiers films à l'ouverture de la page
-document.addEventListener('DOMContentLoaded', fetchActionMovies);
+document.addEventListener('DOMContentLoaded', fetchTopMovies);
 
 
