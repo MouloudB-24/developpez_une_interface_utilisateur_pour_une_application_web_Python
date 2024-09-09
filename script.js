@@ -1,7 +1,8 @@
                 /* Déclaration des variables d'URLs API */ 
 const API_URL_BEST_MOVIE = "http://localhost:8000/api/v1/titles/?page_size=1&sort_by=-imdb_score,title";
-const API_URL_TOP_MOVIE = "http://localhost:8000/api/v1/titles/?page_size=6&sort_by=-imdb_score,-title"
-const API_URL_BIOGRAPHY_MOVIE = "http://localhost:8000/api/v1/titles/?page_size=6&genre=Biography&sort_by=-imdb_score,title"
+const API_URL_TOP_MOVIE = "http://localhost:8000/api/v1/titles/?page_size=6&sort_by=-imdb_score,-title";
+const API_URL_BIOGRAPHY_MOVIE = "http://localhost:8000/api/v1/titles/?page_size=6&genre=Biography&sort_by=-imdb_score,title";
+const API_URL_COMEDY_MOVIE = "http://localhost:8000/api/v1/titles/?page_size=6&genre=Comedy&sort_by=-imdb_score,title"
 
 
 // 1) Récupération des données du meilleur film 
@@ -112,16 +113,16 @@ function displayTopMovies(movieDataArr) {
     const detailButtons = document.querySelectorAll('.details-button');
 
     images.forEach(image => {
-        image.addEventListener('click', event => showTopMovieDetails(event.target.dataset.filmId));
+        image.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
     });
 
     detailButtons.forEach(button => {
-        button.addEventListener('click', event => showTopMovieDetails(event.target.dataset.filmId));
+        button.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
     });
 }
 
 // Fonction pour afficher les détails du film dans la fenêtre modale existante
-async function showTopMovieDetails(filmId) {
+async function showMovieDetails(filmId) {
     try {
         let response = await fetch(`http://localhost:8000/api/v1/titles/${filmId}`);
         let movie = await response.json();
@@ -169,7 +170,7 @@ document.addEventListener('DOMContentLoaded', fetchTopMovies);
 
 // 3) Retrieve data for the best Biography movies 
 // Select the element from the DOM
-const topBiographyMoviesContainer = document.getElementById('biography-movies-container');
+const biographyMoviesContainer = document.getElementById('biography-movies-container');
 
 // Create an empty array to store movies data
 let biographyMovieDataArr = [];
@@ -194,7 +195,7 @@ async function fetchBiographyMovies() {
 // Function to display movies in a dedicated section
 function displayBiographyMovies(biographyMovieDataArr) {
     biographyMovieDataArr.forEach(movie => {
-        topBiographyMoviesContainer.innerHTML += `
+        biographyMoviesContainer.innerHTML += `
         <div class="movie-item">
             <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}">
             <div class="overlay">
@@ -210,16 +211,16 @@ function displayBiographyMovies(biographyMovieDataArr) {
     const detailButtons = document.querySelectorAll('.details-button');
 
     images.forEach(image => {
-        image.addEventListener('click', event => showTopMovieDetails(event.target.dataset.filmId));
+        image.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
     });
 
     detailButtons.forEach(button => {
-        button.addEventListener('click', event => showTopMovieDetails(event.target.dataset.filmId));
+        button.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
     });
 }
 
 // Function to display movie details in the modal window
-async function showTopMovieDetails(filmId) {
+async function showMovieDetails(filmId) {
     try {
         let response = await fetch(`http://localhost:8000/api/v1/titles/${filmId}`);
         let movie = await response.json();
@@ -262,3 +263,101 @@ async function showTopMovieDetails(filmId) {
 
 // Load the movie once the DOM is ready
 document.addEventListener('DOMContentLoaded', fetchBiographyMovies);
+
+
+// 4) Retrieve data for the best Comedy movies 
+// Select the element from the DOM
+const comedyMoviesContainer = document.getElementById('comedy-movies-container');
+
+// Create an empty array to store movies data
+let comedyMovieDataArr = [];
+
+// Function to make API requests
+async function fetchComedyMovies() {
+    try {
+        let response = await fetch(API_URL_COMEDY_MOVIE);
+        let data = await response.json();
+        comedyMovieDataArr = data.results;
+
+        // Make new request to get movie details
+        let comedyMovieDetailsPromises = comedyMovieDataArr.map(movie => fetch(movie.url).then(res => res.json()));
+        let comedyMovieDetails = await Promise.all(comedyMovieDetailsPromises);
+
+        displayComedyMovies(comedyMovieDetails);
+    } catch (error) {
+        console.error("Error retrieving movie data: ", error);
+    }
+}
+
+// Function to display movies in a dedicated section
+function displayComedyMovies(comedyMovieDataArr) {
+    comedyMovieDataArr.forEach(movie => {
+        comedyMoviesContainer.innerHTML += `
+        <div class="movie-item">
+            <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}">
+            <div class="overlay">
+                <h3>${movie.title}</h3>
+                <button class="details-button" data-film-id="${movie.id}">Détails</button>
+            </div>
+        </div> 
+        `;
+    });
+
+    // Add event listeners for image and details button
+    const images = document.querySelectorAll('.movie-img');
+    const detailButtons = document.querySelectorAll('.details-button');
+
+    images.forEach(image => {
+        image.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
+    });
+
+    detailButtons.forEach(button => {
+        button.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
+    });
+}
+
+// Function to display movie details in the modal window
+async function showMovieDetails(filmId) {
+    try {
+        let response = await fetch(`http://localhost:8000/api/v1/titles/${filmId}`);
+        let movie = await response.json();
+
+        // Update modal content with movie details
+        document.querySelector('.modal-affiche').src = movie.image_url;
+        document.querySelector('.modal-title').textContent = movie.title;
+        document.querySelector('.modal-genres').textContent = movie.genres.join(', ');
+        document.querySelector('.modal-date').textContent = movie.year;
+        document.querySelector('.modal-rated').textContent = movie.rated || 'N/A';
+        document.querySelector('.modal-imdb').textContent = movie.imdb_score;
+        document.querySelector('.modal-directors').textContent = movie.directors.join(', ');
+        document.querySelector('.modal-actors').textContent = movie.actors.join(', ');
+        document.querySelector('.modal-duration').textContent = movie.duration || 'N/A';
+        document.querySelector('.modal-country').textContent = movie.countries.join(', ');
+        document.querySelector('.modal-box-office').textContent = movie.box_office || 'N/A';
+        document.querySelector('.modal-description').textContent = movie.long_description || 'Pas de description disponible.';
+
+        // Dispaly modal window
+        const modal = document.getElementById('modal');
+        modal.style.display = "block";
+
+        // Close the modal window when close button is clicked
+        const closeButton = document.querySelector('.close-button');
+        closeButton.addEventListener('click', () => {
+            modal.style.display = "none";
+        });
+
+        // Close the modal window when clicking outside the modal
+        window.addEventListener('click', (event) => {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        });
+
+    } catch (error) {
+        console.error("Erreur lors de la récupération des détails du film : ", error);
+    }
+}
+
+// Load the movie once the DOM is ready
+document.addEventListener('DOMContentLoaded', fetchComedyMovies);
+
