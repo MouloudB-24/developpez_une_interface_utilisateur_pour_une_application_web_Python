@@ -1,8 +1,14 @@
-                /* Déclaration des variables d'URLs API */ 
+// Déclaration des variables d'URLs API 
 const API_URL_BEST_MOVIE = "http://localhost:8000/api/v1/titles/?page_size=1&sort_by=-imdb_score,title";
 const API_URL_TOP_MOVIE = "http://localhost:8000/api/v1/titles/?page_size=6&sort_by=-imdb_score,-title";
 const API_URL_BIOGRAPHY_MOVIE = "http://localhost:8000/api/v1/titles/?page_size=6&genre=Biography&sort_by=-imdb_score,title";
 const API_URL_COMEDY_MOVIE = "http://localhost:8000/api/v1/titles/?page_size=6&genre=Comedy&sort_by=-imdb_score,title"
+
+
+// Select the elements from the DOM
+const topMoviesContainer = document.getElementById('top-movies-container');
+const biographyMoviesContainer = document.getElementById('biography-movies-container');
+const comedyMoviesContainer = document.getElementById('comedy-movies-container');
 
 
 // 1) Récupération des données du meilleur film 
@@ -11,7 +17,9 @@ async function fetchBestMovie() {
     const response = await fetch(API_URL_BEST_MOVIE);
     const data = await response.json();
     const dataResults = data.results[0];
-    let movie = await fetch(dataResults.url).then(res => res.json());
+    let movie = await fetch(dataResults.url);
+    movie = await movie.json();
+
     displayBestMovie(movie);
 }
 
@@ -36,64 +44,9 @@ function displayBestMovie(movie) {
     });
 }
 
-// Fonction pour formater des données d'ongler Modal
-function openModal(movie) {
-    const modal = document.getElementById('modal');
-    modal.style.display = 'flex';
-
-    document.querySelector('.modal-affiche').src = movie.image_url;
-    document.querySelector('.modal-title').textContent = movie.title;
-    document.querySelector('.modal-genres').textContent = movie.genres.join(', ');
-    document.querySelector('.modal-date').textContent = movie.date_published;
-    document.querySelector('.modal-rated').textContent = movie.rated;
-    document.querySelector('.modal-imdb').textContent = movie.imdb_score;
-    document.querySelector('.modal-directors').textContent = movie.directors.join(', ');
-    document.querySelector('.modal-actors').textContent = movie.actors.join(', ');
-    document.querySelector('.modal-duration').textContent = movie.duration;
-    document.querySelector('.modal-country').textContent = movie.countries.join(', ');
-    document.querySelector('.modal-box-office').textContent = movie.worldwide_gross_income ? movie.worldwide_gross_income : "N/A";
-    document.querySelector('.modal-description').textContent = movie.long_description;
-
-    // Fermer la modale lorsque l'utilisateur clique sur le bouton de fermeture
-    document.querySelector('.close-button').addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-
-    // Fermer la modale lorsque l'utilisateur clique en dehors du contenu
-    window.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-}
-
 window.onload = fetchBestMovie;
 
-
 // 2) Récupérer les données des meilleurs films 
-// Séléctionner l'élément à partir du DOM
-const topMoviesContainer = document.getElementById('top-movies-container');
-
-// Créer un tableau vide pour stocker les données des auteurs
-let movieDataArr = [];
-
-// Fonction pour faire les requêtes vers l'API 
-async function fetchTopMovies() {
-    try {
-        let response = await fetch(API_URL_TOP_MOVIE);
-        let data = await response.json();
-        movieDataArr = data.results;
-
-        // Make new request to get movie details
-        let movieDetailsPromises = movieDataArr.map(movie => fetch(movie.url).then(res => res.json()));
-        let movieDetails = await Promise.all(movieDetailsPromises);
-
-        displayTopMovies(movieDetails);
-    } catch (error) {
-        console.error("Error retrieving movie data: ", error);
-    }
-}
-
 // Fonction pour afficher les films dans une section dédiée
 function displayTopMovies(movieDataArr) {
     movieDataArr.forEach(movie => {
@@ -109,88 +62,14 @@ function displayTopMovies(movieDataArr) {
     });
 
     // Ajouter des écouteurs d'événements pour les images et les boutons de détails
-    const images = document.querySelectorAll('.movie-img');
-    const detailButtons = document.querySelectorAll('.details-button');
-
-    images.forEach(image => {
-        image.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
-    });
-
-    detailButtons.forEach(button => {
-        button.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
-    });
+    setupEventListenersForMovies()
 }
-
-// Fonction pour afficher les détails du film dans la fenêtre modale existante
-async function showMovieDetails(filmId) {
-    try {
-        let response = await fetch(`http://localhost:8000/api/v1/titles/${filmId}`);
-        let movie = await response.json();
-
-        // Mise à jour du contenu de la modale avec les détails du film
-        document.querySelector('.modal-affiche').src = movie.image_url;
-        document.querySelector('.modal-title').textContent = movie.title;
-        document.querySelector('.modal-genres').textContent = movie.genres.join(', ');
-        document.querySelector('.modal-date').textContent = movie.year;
-        document.querySelector('.modal-rated').textContent = movie.rated || 'N/A';
-        document.querySelector('.modal-imdb').textContent = movie.imdb_score;
-        document.querySelector('.modal-directors').textContent = movie.directors.join(', ');
-        document.querySelector('.modal-actors').textContent = movie.actors.join(', ');
-        document.querySelector('.modal-duration').textContent = movie.duration || 'N/A';
-        document.querySelector('.modal-country').textContent = movie.countries.join(', ');
-        document.querySelector('.modal-box-office').textContent = movie.box_office || 'N/A';
-        document.querySelector('.modal-description').textContent = movie.long_description || 'Pas de description disponible.';
-
-        // Afficher la modale
-        const modal = document.getElementById('modal');
-        modal.style.display = "block";
-
-        // Fermer la modale quand on clique sur le bouton de fermeture
-        const closeButton = document.querySelector('.close-button');
-        closeButton.addEventListener('click', () => {
-            modal.style.display = "none";
-        });
-
-        // Fermer la modale quand on clique en dehors de la modale
-        window.addEventListener('click', (event) => {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        });
-
-    } catch (error) {
-        console.error("Erreur lors de la récupération des détails du film : ", error);
-    }
-}
-
-// Charger les six premiers films une fois que le DOM est prêt!
-document.addEventListener('DOMContentLoaded', fetchTopMovies);
 
 
 
 // 3) Retrieve data for the best Biography movies 
-// Select the element from the DOM
-const biographyMoviesContainer = document.getElementById('biography-movies-container');
-
 // Create an empty array to store movies data
 let biographyMovieDataArr = [];
-
-// Function to make API requests
-async function fetchBiographyMovies() {
-    try {
-        let response = await fetch(API_URL_BIOGRAPHY_MOVIE);
-        let data = await response.json();
-        biographyMovieDataArr = data.results;
-
-        // Make new request to get movie details
-        let biographyMovieDetailsPromises = biographyMovieDataArr.map(movie => fetch(movie.url).then(res => res.json()));
-        let biographyMovieDetails = await Promise.all(biographyMovieDetailsPromises);
-
-        displayBiographyMovies(biographyMovieDetails);
-    } catch (error) {
-        console.error("Error retrieving movie data: ", error);
-    }
-}
 
 // Function to display movies in a dedicated section
 function displayBiographyMovies(biographyMovieDataArr) {
@@ -207,87 +86,13 @@ function displayBiographyMovies(biographyMovieDataArr) {
     });
 
     // Add event listeners for image and details button
-    const images = document.querySelectorAll('.movie-img');
-    const detailButtons = document.querySelectorAll('.details-button');
-
-    images.forEach(image => {
-        image.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
-    });
-
-    detailButtons.forEach(button => {
-        button.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
-    });
+   setupEventListenersForMovies()
 }
-
-// Function to display movie details in the modal window
-async function showMovieDetails(filmId) {
-    try {
-        let response = await fetch(`http://localhost:8000/api/v1/titles/${filmId}`);
-        let movie = await response.json();
-
-        // Update modal content with movie details
-        document.querySelector('.modal-affiche').src = movie.image_url;
-        document.querySelector('.modal-title').textContent = movie.title;
-        document.querySelector('.modal-genres').textContent = movie.genres.join(', ');
-        document.querySelector('.modal-date').textContent = movie.year;
-        document.querySelector('.modal-rated').textContent = movie.rated || 'N/A';
-        document.querySelector('.modal-imdb').textContent = movie.imdb_score;
-        document.querySelector('.modal-directors').textContent = movie.directors.join(', ');
-        document.querySelector('.modal-actors').textContent = movie.actors.join(', ');
-        document.querySelector('.modal-duration').textContent = movie.duration || 'N/A';
-        document.querySelector('.modal-country').textContent = movie.countries.join(', ');
-        document.querySelector('.modal-box-office').textContent = movie.box_office || 'N/A';
-        document.querySelector('.modal-description').textContent = movie.long_description || 'Pas de description disponible.';
-
-        // Dispaly modal window
-        const modal = document.getElementById('modal');
-        modal.style.display = "block";
-
-        // Close the modal window when close button is clicked
-        const closeButton = document.querySelector('.close-button');
-        closeButton.addEventListener('click', () => {
-            modal.style.display = "none";
-        });
-
-        // Close the modal window when clicking outside the modal
-        window.addEventListener('click', (event) => {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        });
-
-    } catch (error) {
-        console.error("Erreur lors de la récupération des détails du film : ", error);
-    }
-}
-
-// Load the movie once the DOM is ready
-document.addEventListener('DOMContentLoaded', fetchBiographyMovies);
 
 
 // 4) Retrieve data for the best Comedy movies 
-// Select the element from the DOM
-const comedyMoviesContainer = document.getElementById('comedy-movies-container');
-
 // Create an empty array to store movies data
 let comedyMovieDataArr = [];
-
-// Function to make API requests
-async function fetchComedyMovies() {
-    try {
-        let response = await fetch(API_URL_COMEDY_MOVIE);
-        let data = await response.json();
-        comedyMovieDataArr = data.results;
-
-        // Make new request to get movie details
-        let comedyMovieDetailsPromises = comedyMovieDataArr.map(movie => fetch(movie.url).then(res => res.json()));
-        let comedyMovieDetails = await Promise.all(comedyMovieDetailsPromises);
-
-        displayComedyMovies(comedyMovieDetails);
-    } catch (error) {
-        console.error("Error retrieving movie data: ", error);
-    }
-}
 
 // Function to display movies in a dedicated section
 function displayComedyMovies(comedyMovieDataArr) {
@@ -304,6 +109,80 @@ function displayComedyMovies(comedyMovieDataArr) {
     });
 
     // Add event listeners for image and details button
+    setupEventListenersForMovies()
+}
+
+// Function for making requests to the API
+async function fetchMovies(url, displayFunction){
+    try {
+        let response = await fetch(url);
+        let data = await response.json();
+        let movieDataArr = data.results;
+
+        let movieDetailsPromises = movieDataArr.map(movie => fetch(movie.url).then(res => res.json()));
+        let movieDetails = await Promise.all(movieDetailsPromises);
+
+        displayFunction(movieDetails);
+    } catch (error) {
+        console.log("Error retrieving movie data; ", error)
+    }  
+}
+
+// Fonction pour afficher les détails du film dans la fenêtre modale existante
+async function showMovieDetails(filmId) {
+    try {
+        let response = await fetch(`http://localhost:8000/api/v1/titles/${filmId}`);
+        let movie = await response.json();
+
+        // Utilisation de la fonction openModal pour afficher les détails du film
+        openModal(movie)
+
+    } catch (error) {
+        console.error("Erreur lors de la récupération des détails du film : ", error);
+    }
+}
+
+// Fonction pour formater des données d'ongler Modal
+function openModal(movie) {
+    const modal = document.getElementById('modal');
+
+    // Fill in the modal information with the movie details
+    document.querySelector('.modal-affiche').src = movie.image_url;
+    document.querySelector('.modal-title').textContent = movie.title;
+    document.querySelector('.modal-genres').textContent = movie.genres.join(', ');
+    document.querySelector('.modal-date').textContent = movie.date_published;
+    document.querySelector('.modal-rated').textContent = movie.rated;
+    document.querySelector('.modal-imdb').textContent = movie.imdb_score;
+    document.querySelector('.modal-directors').textContent = movie.directors.join(', ');
+    document.querySelector('.modal-actors').textContent = movie.actors.join(', ');
+    document.querySelector('.modal-duration').textContent = movie.duration;
+    document.querySelector('.modal-country').textContent = movie.countries.join(', ');
+    document.querySelector('.modal-box-office').textContent = movie.worldwide_gross_income ? movie.worldwide_gross_income : "N/A";
+    document.querySelector('.modal-description').textContent = movie.long_description;
+
+    // Display the modal
+    modal.style.display = 'flex';
+
+    // Gestion de la fermeture de la modale
+    setupModalClose(modal);
+}
+
+function setupModalClose(modal) {
+    // Fermer la modale quand l'utilisateur clique sur le bouton de fermeture
+    const closeButton = document.querySelector('.close-button');
+    closeButton.addEventListener('click', () => {
+        modal.style.display = "none";
+    });
+
+    // Fermer la modale quand l'utilisateur clique en dehors de la modale
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+}
+
+function setupEventListenersForMovies() {
     const images = document.querySelectorAll('.movie-img');
     const detailButtons = document.querySelectorAll('.details-button');
 
@@ -316,48 +195,10 @@ function displayComedyMovies(comedyMovieDataArr) {
     });
 }
 
-// Function to display movie details in the modal window
-async function showMovieDetails(filmId) {
-    try {
-        let response = await fetch(`http://localhost:8000/api/v1/titles/${filmId}`);
-        let movie = await response.json();
-
-        // Update modal content with movie details
-        document.querySelector('.modal-affiche').src = movie.image_url;
-        document.querySelector('.modal-title').textContent = movie.title;
-        document.querySelector('.modal-genres').textContent = movie.genres.join(', ');
-        document.querySelector('.modal-date').textContent = movie.year;
-        document.querySelector('.modal-rated').textContent = movie.rated || 'N/A';
-        document.querySelector('.modal-imdb').textContent = movie.imdb_score;
-        document.querySelector('.modal-directors').textContent = movie.directors.join(', ');
-        document.querySelector('.modal-actors').textContent = movie.actors.join(', ');
-        document.querySelector('.modal-duration').textContent = movie.duration || 'N/A';
-        document.querySelector('.modal-country').textContent = movie.countries.join(', ');
-        document.querySelector('.modal-box-office').textContent = movie.box_office || 'N/A';
-        document.querySelector('.modal-description').textContent = movie.long_description || 'Pas de description disponible.';
-
-        // Dispaly modal window
-        const modal = document.getElementById('modal');
-        modal.style.display = "block";
-
-        // Close the modal window when close button is clicked
-        const closeButton = document.querySelector('.close-button');
-        closeButton.addEventListener('click', () => {
-            modal.style.display = "none";
-        });
-
-        // Close the modal window when clicking outside the modal
-        window.addEventListener('click', (event) => {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        });
-
-    } catch (error) {
-        console.error("Erreur lors de la récupération des détails du film : ", error);
-    }
-}
 
 // Load the movie once the DOM is ready
-document.addEventListener('DOMContentLoaded', fetchComedyMovies);
-
+document.addEventListener("DOMContentLoaded", () => {
+    fetchMovies(API_URL_TOP_MOVIE, displayTopMovies);
+    fetchMovies(API_URL_BIOGRAPHY_MOVIE, displayBiographyMovies);
+    fetchMovies(API_URL_COMEDY_MOVIE, displayComedyMovies);
+})
