@@ -196,13 +196,6 @@ function setupModalClose(modal) {
     });
 }
 
-// Load the movie once the DOM is ready
-document.addEventListener("DOMContentLoaded", () => {
-    fetchMovies(API_URL_TOP_MOVIE, displayTopMovies);
-    fetchMovies(API_URL_BIOGRAPHY_MOVIE, displayBiographyMovies);
-    fetchMovies(API_URL_COMEDY_MOVIE, displayComedyMovies);
-})
-
 
 // 5) Retrieve data API for the free category
 const categoriesListContainer = document.getElementById('categories');
@@ -275,5 +268,10 @@ async function showMovieDetailByCategory(selectedCategory) {
     }
 }
 
-// Appeler la fonction pour charger les catégories
-fetchCategories();
+// Load the movie once the DOM is ready
+document.addEventListener("DOMContentLoaded", () => {
+    fetchMovies(API_URL_TOP_MOVIE, displayTopMovies);
+    fetchMovies(API_URL_BIOGRAPHY_MOVIE, displayBiographyMovies);
+    fetchMovies(API_URL_COMEDY_MOVIE, displayComedyMovies);
+    fetchCategories();
+})
