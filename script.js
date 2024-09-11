@@ -3,6 +3,7 @@ const API_URL_BEST_MOVIE = "http://localhost:8000/api/v1/titles/?page_size=1&sor
 const API_URL_TOP_MOVIE = "http://localhost:8000/api/v1/titles/?page_size=6&sort_by=-imdb_score,-title";
 const API_URL_BIOGRAPHY_MOVIE = "http://localhost:8000/api/v1/titles/?page_size=6&genre=Biography&sort_by=-imdb_score,title";
 const API_URL_COMEDY_MOVIE = "http://localhost:8000/api/v1/titles/?page_size=6&genre=Comedy&sort_by=-imdb_score,title"
+const API_URL_CATEGORIES = "http://localhost:8000/api/v1/genres/?page_size=25"
 
 
 // Select the elements from the DOM
@@ -112,6 +113,19 @@ function displayComedyMovies(comedyMovieDataArr) {
     setupEventListenersForMovies()
 }
 
+function setupEventListenersForMovies() {
+    const images = document.querySelectorAll('.movie-img');
+    const detailButtons = document.querySelectorAll('.details-button');
+
+    images.forEach(image => {
+        image.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
+    });
+
+    detailButtons.forEach(button => {
+        button.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
+    });
+}
+
 // Function for making requests to the API
 async function fetchMovies(url, displayFunction){
     try {
@@ -182,23 +196,84 @@ function setupModalClose(modal) {
     });
 }
 
-function setupEventListenersForMovies() {
-    const images = document.querySelectorAll('.movie-img');
-    const detailButtons = document.querySelectorAll('.details-button');
-
-    images.forEach(image => {
-        image.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
-    });
-
-    detailButtons.forEach(button => {
-        button.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
-    });
-}
-
-
 // Load the movie once the DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
     fetchMovies(API_URL_TOP_MOVIE, displayTopMovies);
     fetchMovies(API_URL_BIOGRAPHY_MOVIE, displayBiographyMovies);
     fetchMovies(API_URL_COMEDY_MOVIE, displayComedyMovies);
 })
+
+
+// 5) Retrieve data API for the free category
+const categoriesListContainer = document.getElementById('categories');
+const categoriesContainer = document.getElementById('other-movies-container');
+let categoriesDataArr = [];
+
+// Fonction pour récupérer la liste des catégories
+async function fetchCategories(){
+    try {
+        let response = await fetch(API_URL_CATEGORIES);
+        let data = await response.json();
+        categoriesDataArr = data.results;
+
+        // Afficher les catégories dans le <select>
+        displayListCategories(categoriesDataArr);
+    } catch (error) {
+        console.log("Erreur lors de la récupération des catégories : ", error);
+    }  
+}
+
+// Fonction pour afficher la liste des catégories dans le <select>
+function displayListCategories(categoriesDataArr) {
+    // Nettoyer le contenu actuel du <select> pour éviter les duplications
+    categoriesListContainer.innerHTML = `<option value="" disabled selected>Choisir une catégorie</option>`;
+
+    categoriesDataArr.forEach(category => {
+        categoriesListContainer.innerHTML += `
+        <option value="${category.name}">${category.name}</option>
+        `;
+    });
+
+    // Attacher l'écouteur d'événement `change` au <select> après avoir ajouté les options
+    categoriesListContainer.addEventListener('change', (event) => {
+        const selectedCategory = event.target.value;
+        console.log(`Catégorie sélectionnée : ${selectedCategory}`);
+        
+        // Appeler la fonction pour afficher les détails des films de la catégorie sélectionnée
+        showMovieDetailByCategory(selectedCategory);
+    });
+}
+
+// Fonction pour afficher les films de la catégorie sélectionnée
+async function showMovieDetailByCategory(selectedCategory) {
+    // Vider l'affichage des films précédents
+    categoriesContainer.innerHTML = "";
+
+    try {
+        let response = await fetch(`http://localhost:8000/api/v1/titles/?page_size=6&genre=${selectedCategory}&sort_by=-imdb_score,title`);
+        let data = await response.json();
+        let movieDataArr = data.results;
+
+        // Récupérer les détails des films
+        let movieDetailsPromises = movieDataArr.map(movie => fetch(movie.url).then(res => res.json()));
+        let movieDetails = await Promise.all(movieDetailsPromises);
+
+        // Afficher les films dans la section dédiée
+        movieDetails.forEach(movie => {
+            categoriesContainer.innerHTML +=`
+            <div class="movie-item">
+                <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}">
+                <div class="overlay">
+                    <h3>${movie.title}</h3>
+                    <button class="details-button" data-film-id="${movie.id}">Détails</button>
+                </div>
+            </div> 
+            `;
+        });
+    } catch (error) {
+        console.log("Erreur lors de la récupération des films : ", error);
+    }
+}
+
+// Appeler la fonction pour charger les catégories
+fetchCategories();

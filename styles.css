@@ -132,7 +132,7 @@ section {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1000;
+    z-index: 1;
     left: 0;
     top: 0;
     width: 100%;
@@ -206,12 +206,6 @@ section {
 
 .movie-item:hover .overlay {
     opacity: 1;
-}
-
-#top-movies-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
 }
 
 h2 {
