@@ -1,7 +1,8 @@
 # Default ignored files
- *.idea
- *.vscode
- *.git
-
+ 
 #  Excture les dossiers 
 /OCMovies-API-EN-FR
+/.idea
+/.vscode
+/.git
+
