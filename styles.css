@@ -236,12 +236,12 @@ h3 {
 .categories {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 7px;
 }
 
 select {
-    padding: 5px;
-    font-size: 16px;
+    padding: 3px;
+    font-size: 14px;
     font-weight: bold;
 }
 
@@ -265,6 +265,15 @@ select {
         width: 25%;
     }
 
+    /* Style pour la liste déroulante des catégories*/
+    .categories {
+        gap: 10px;
+    }
+
+    select {
+        padding: 5px;
+        font-size: 16px;
+    }
   }
   
   /* Styles pour les ordinateurs (écrans >= 1024px) */
