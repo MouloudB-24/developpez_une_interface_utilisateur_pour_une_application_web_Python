@@ -28,7 +28,7 @@ async function fetchBestMovie() {
 function displayBestMovie(movie) {
     const bestMovieDiv = document.querySelector('.best-movie');
     bestMovieDiv.innerHTML +=`
-        <img src="${movie.image_url}" alt="${movie.title}" class="affiche-du-film" loading="lazy">
+        <img src="${movie.image_url}" alt="${movie.title}" class="affiche-du-film">
         <div class="details-film">
             <h3>${movie.title}</h3>
             <p>${movie.description}</p>
@@ -53,7 +53,7 @@ function displayTopMovies(movieDataArr) {
     movieDataArr.forEach(movie => {
         topMoviesContainer.innerHTML += `
         <div class="movie-item">
-            <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}" loading="lazy">
+            <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}">
             <div class="overlay">
                 <h3>${movie.title}</h3>
                 <button class="details-button" data-film-id="${movie.id}">Détails</button>
@@ -77,7 +77,7 @@ function displayBiographyMovies(biographyMovieDataArr) {
     biographyMovieDataArr.forEach(movie => {
         biographyMoviesContainer.innerHTML += `
         <div class="movie-item">
-            <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}" loading="lazy">
+            <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}">
             <div class="overlay">
                 <h3>${movie.title}</h3>
                 <button class="details-button" data-film-id="${movie.id}">Détails</button>
@@ -100,7 +100,7 @@ function displayComedyMovies(comedyMovieDataArr) {
     comedyMovieDataArr.forEach(movie => {
         comedyMoviesContainer.innerHTML += `
         <div class="movie-item">
-            <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}" loading="lazy">
+            <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}">
             <div class="overlay">
                 <h3>${movie.title}</h3>
                 <button class="details-button" data-film-id="${movie.id}">Détails</button>
@@ -255,7 +255,7 @@ async function showMovieDetailByCategory(selectedCategory) {
         movieDetails.forEach(movie => {
             categoriesContainer.innerHTML +=`
             <div class="movie-item">
-                <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}" loading="lazy">
+                <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}">
                 <div class="overlay">
                     <h3>${movie.title}</h3>
                     <button class="details-button" data-film-id="${movie.id}">Détails</button>
