@@ -32,7 +32,7 @@ function displayBestMovie(movie) {
         <div class="details-film">
             <h3>${movie.title}</h3>
             <p>${movie.description}</p>
-            <button class="details-button" id="details-button">Détails</button>
+            <button class="details-button">Détails</button>
         </div>
     `;
     // Ajouter un événement click pour afficher la fenêtre modale
@@ -56,7 +56,7 @@ function displayTopMovies(movieDataArr) {
             <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}">
             <div class="overlay">
                 <h3>${movie.title}</h3>
-                <button class="details-button" id="details-button"data-film-id="${movie.id}">Détails</button>
+                <button class="details-button" data-film-id="${movie.id}">Détails</button>
             </div>
         </div> 
         `;
@@ -78,7 +78,7 @@ function displayBiographyMovies(biographyMovieDataArr) {
             <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}">
             <div class="overlay">
                 <h3>${movie.title}</h3>
-                <button class="details-button" id="details-button" data-film-id="${movie.id}">Détails</button>
+                <button class="details-button" data-film-id="${movie.id}">Détails</button>
             </div>
         </div> 
         `;
@@ -101,7 +101,7 @@ function displayComedyMovies(comedyMovieDataArr) {
             <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}">
             <div class="overlay">
                 <h3>${movie.title}</h3>
-                <button class="details-button" id="details-button" data-film-id="${movie.id}">Détails</button>
+                <button class="details-button" data-film-id="${movie.id}">Détails</button>
             </div>
         </div> 
         `;
@@ -111,92 +111,7 @@ function displayComedyMovies(comedyMovieDataArr) {
     setupEventListenersForMovies()
 }
 
-// ---------------------------------------- FONCTIONS COMMON ------------------------------------------------ 
-function setupEventListenersForMovies() {
-    const images = document.querySelectorAll('.movie-img');
-    const detailButtons = document.querySelectorAll('.details-button');
-
-    images.forEach(image => {
-        image.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
-    });
-
-    detailButtons.forEach(button => {
-        button.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
-    });
-}
-
-// Function for making requests to the API
-async function fetchMovies(url, displayFunction){
-    try {
-        let response = await fetch(url);
-        let data = await response.json();
-        let movieDataArr = data.results;
-
-        let movieDetailsPromises = movieDataArr.map(movie => fetch(movie.url).then(res => res.json()));
-        let movieDetails = await Promise.all(movieDetailsPromises);
-
-        displayFunction(movieDetails);
-    } catch (error) {
-        console.log("Error retrieving movie data; ", error)
-    }  
-}
-
-// Fonction pour afficher les détails du film dans la fenêtre modale existante
-async function showMovieDetails(filmId) {
-    try {
-        let response = await fetch(`http://localhost:8000/api/v1/titles/${filmId}`);
-        let movie = await response.json();
-
-        // Utilisation de la fonction openModal pour afficher les détails du film
-        openModal(movie)
-
-    } catch (error) {
-        console.error("Erreur lors de la récupération des détails du film : ", error);
-    }
-}
-
-// Fonction pour formater des données d'ongler Modal
-function openModal(movie) {
-    const modal = document.getElementById('modal');
-
-    // Fill in the modal information with the movie details
-    document.querySelector('.modal-affiche').src = movie.image_url;
-    document.querySelector('.modal-title').textContent = movie.title;
-    document.querySelector('.modal-genres').textContent = movie.genres.join(', ');
-    document.querySelector('.modal-date').textContent = movie.date_published;
-    document.querySelector('.modal-rated').textContent = movie.rated;
-    document.querySelector('.modal-imdb').textContent = movie.imdb_score;
-    document.querySelector('.modal-directors').textContent = movie.directors.join(', ');
-    document.querySelector('.modal-actors').textContent = movie.actors.join(', ');
-    document.querySelector('.modal-duration').textContent = movie.duration;
-    document.querySelector('.modal-country').textContent = movie.countries.join(', ');
-    document.querySelector('.modal-box-office').textContent = movie.worldwide_gross_income ? movie.worldwide_gross_income : "N/A";
-    document.querySelector('.modal-description').textContent = movie.long_description;
-
-    // Display the modal
-    modal.style.display = 'flex';
-
-    // Gestion de la fermeture de la modale
-    setupModalClose(modal);
-}
-
-function setupModalClose(modal) {
-    // Fermer la modale quand l'utilisateur clique sur le bouton de fermeture
-    const closeButton = document.querySelector('.close-button');
-    closeButton.addEventListener('click', () => {
-        modal.style.display = "none";
-    });
-
-    // Fermer la modale quand l'utilisateur clique en dehors de la modale
-    window.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    });
-}
-
-
-// 5) Retrieve data API for the free category
+// ---------------------------------------- FREE CATEGORY ------------------------------------------------ 
 const categoriesListContainer = document.getElementById('categories');
 const categoriesContainer = document.getElementById('other-movies-container');
 let categoriesDataArr = [];
@@ -257,7 +172,7 @@ async function showMovieDetailByCategory(selectedCategory) {
                 <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}">
                 <div class="overlay">
                     <h3>${movie.title}</h3>
-                    <button class="details-button" id="details-button" data-film-id="${movie.id}">Détails</button>
+                    <button class="details-button" data-film-id="${movie.id}">Détails</button>
                 </div>
             </div> 
             `;
@@ -265,9 +180,99 @@ async function showMovieDetailByCategory(selectedCategory) {
     } catch (error) {
         console.log("Erreur lors de la récupération des films : ", error);
     }
+
+    // Add event listeners for image and details button
+    setupEventListenersForMovies()
 }
 
-// Fonction pour réinitialiser l'affichage des films en fonction de la taille d'écran
+// ---------------------------------------- COMMON FUNCTIONS TO ALL CATEGORIES ----------------------------------------------
+function setupEventListenersForMovies() {
+    const detailButtons = document.querySelectorAll('.details-button');
+    const images = document.querySelectorAll('.movie-img');
+
+    detailButtons.forEach(button => {
+        button.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
+    });
+
+
+    images.forEach(image => {
+        image.addEventListener('click', event => showMovieDetails(event.target.dataset.filmId));
+    });
+}
+
+
+// Fonction pour afficher les détails du film dans la fenêtre modale existante
+async function showMovieDetails(filmId) {
+    try {
+        let response = await fetch(`http://localhost:8000/api/v1/titles/${filmId}`);
+        let movie = await response.json();
+
+        // Utilisation de la fonction openModal pour afficher les détails du film
+        openModal(movie)
+
+    } catch (error) {
+        console.error("Erreur lors de la récupération des détails du film : ", error);
+    }
+}
+
+// Fonction pour formater des données d'ongler Modal
+function openModal(movie) {
+    const modal = document.getElementById('modal');
+
+    // Fill in the modal information with the movie details
+    document.querySelector('.modal-affiche').src = movie.image_url;
+    document.querySelector('.modal-title').textContent = movie.title;
+    document.querySelector('.modal-genres').textContent = movie.genres.join(', ');
+    document.querySelector('.modal-date').textContent = movie.date_published;
+    document.querySelector('.modal-rated').textContent = movie.rated;
+    document.querySelector('.modal-imdb').textContent = movie.imdb_score;
+    document.querySelector('.modal-directors').textContent = movie.directors.join(', ');
+    document.querySelector('.modal-actors').textContent = movie.actors.join(', ');
+    document.querySelector('.modal-duration').textContent = movie.duration;
+    document.querySelector('.modal-country').textContent = movie.countries.join(', ');
+    document.querySelector('.modal-box-office').textContent = movie.worldwide_gross_income ? movie.worldwide_gross_income : "N/A";
+    document.querySelector('.modal-description').textContent = movie.long_description;
+
+    // Display the modal
+    modal.style.display = 'flex';
+
+    // Gestion de la fermeture de la modale
+    setupModalClose(modal);
+}
+
+function setupModalClose(modal) {
+    // Fermer la modale quand l'utilisateur clique sur le bouton de fermeture
+    const closeButton = document.querySelector('.close-button');
+    closeButton.addEventListener('click', () => {
+        modal.style.display = "none";
+    });
+
+    // Fermer la modale quand l'utilisateur clique en dehors de la modale
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+}
+
+// Function for making requests to the API
+async function fetchMovies(url, displayFunction){
+    try {
+        let response = await fetch(url);
+        let data = await response.json();
+        let movieDataArr = data.results;
+
+        let movieDetailsPromises = movieDataArr.map(movie => fetch(movie.url).then(res => res.json()));
+        let movieDetails = await Promise.all(movieDetailsPromises);
+
+        displayFunction(movieDetails);
+    } catch (error) {
+        console.log("Error retrieving movie data; ", error)
+    }  
+}
+
+// ---------------------------------------- BOUTON "VOIR PLUS/VOIR MOINS" ------------------------------------------------ 
+// Foncton réinitialiser l'affichage au changement d'écran
 function resetMovieDisplay() {
     document.querySelectorAll('.movies-grid').forEach(movieGrid => {
         let movies = movieGrid.querySelectorAll('.movie-item');
@@ -330,7 +335,7 @@ document.querySelectorAll('.show-more-btn').forEach(button => {
     });
 });
 
-// Réinitialiser l'affichage des films lors du redimensionnement de la fenêtre
+// Réinitialiser l'affichage des films lors de changement de la taille de la fenêtre
 window.addEventListener('resize', function() {
     resetMovieDisplay();
 });
