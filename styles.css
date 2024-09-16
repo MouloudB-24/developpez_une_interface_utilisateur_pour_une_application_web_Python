@@ -78,8 +78,9 @@ h1 {
   }
   
   /* Style pour le bouton de détails */
-  .details-button {
-    padding: 5px 10px;
+  #details-button {
+    
+    padding: 6px 15px;
     border: none;
     border-radius: 20px;
     background-color: red;
@@ -89,7 +90,7 @@ h1 {
   }
   
   /* Changement de l'opacité du bouton au survol */
-  .details-button:hover {
+  #details-button:hover {
     opacity: 0.8;
   }
 
@@ -181,15 +182,30 @@ section {
     margin: 5px 0;
 }
 
+.show-more-btn {
+    margin-top: 10px;
+    margin-left: 44%;
+}
+
 
 /* Styles pour la section des six films les mieux notés */
 /* Style pour chaque carte de film */
+.movie-item {
+    display: none;
+}
+/* Toujours afficher les 2 premiers éléments */
+.movie-item:nth-child(-n+2) {
+    display: block;
+  }
+
 .movie-item {
     position: relative;
     overflow: hidden;
     border-radius: 10px;
     height: 350px;
 }
+
+/* Afficher seulement les 2 premiers films */
 
 /* Limiter la taille des images et conserver le ratio */
 .movie-item img {
@@ -241,10 +257,15 @@ select {
 }
 
 
-/* Styles pour les tablettes (écrans >= 768px) */
-@media screen and (min-width: 768px) {
+/* ------------ Styles pour les Tablettes (écrans >= 768px) ------------ */
+@media only screen and (min-width: 768px) {
     .movies-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Afficher seulement les 4 premiers films */
+    .movie-item:nth-child(-n+4) {
+        display: block;
     }
 
     /* Container du meilleur film */
@@ -277,14 +298,23 @@ select {
 
   }
   
-  /* Styles pour les ordinateurs (écrans >= 1024px) */
-  @media screen and (min-width: 1024px) {
+  /* ------------ Styles pour les ordinateurs (écrans >= 1024px) -------------- */
+  @media only screen and (min-width: 1024px) {
     .movies-grid {
         grid-template-columns: repeat(3, 1fr);
     }
 
+    /* Afficher tous les films */
+    .movie-item {
+        display: block;
+    }
 
-      /* Style du titre de la page */
+    /* Masquer le bouton "Voir plus" */
+    .show-more-btn {
+        display: none;
+    }
+
+    /* Style du titre de la page */
     h1 {
         font-size: 3em;
     }

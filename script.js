@@ -32,7 +32,7 @@ function displayBestMovie(movie) {
         <div class="details-film">
             <h3>${movie.title}</h3>
             <p>${movie.description}</p>
-            <button class="details-button">Détails</button>
+            <button class="details-button" id="details-button">Détails</button>
         </div>
     `;
     // Ajouter un événement click pour afficher la fenêtre modale
@@ -56,7 +56,7 @@ function displayTopMovies(movieDataArr) {
             <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}">
             <div class="overlay">
                 <h3>${movie.title}</h3>
-                <button class="details-button" data-film-id="${movie.id}">Détails</button>
+                <button class="details-button" id="details-button"data-film-id="${movie.id}">Détails</button>
             </div>
         </div> 
         `;
@@ -80,7 +80,7 @@ function displayBiographyMovies(biographyMovieDataArr) {
             <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}">
             <div class="overlay">
                 <h3>${movie.title}</h3>
-                <button class="details-button" data-film-id="${movie.id}">Détails</button>
+                <button class="details-button" id="details-button" data-film-id="${movie.id}">Détails</button>
             </div>
         </div> 
         `;
@@ -103,7 +103,7 @@ function displayComedyMovies(comedyMovieDataArr) {
             <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}">
             <div class="overlay">
                 <h3>${movie.title}</h3>
-                <button class="details-button" data-film-id="${movie.id}">Détails</button>
+                <button class="details-button" id="details-button" data-film-id="${movie.id}">Détails</button>
             </div>
         </div> 
         `;
@@ -258,7 +258,7 @@ async function showMovieDetailByCategory(selectedCategory) {
                 <img src="${movie.image_url}" alt="${movie.title}" class="movie-img" data-film-id="${movie.id}">
                 <div class="overlay">
                     <h3>${movie.title}</h3>
-                    <button class="details-button" data-film-id="${movie.id}">Détails</button>
+                    <button class="details-button" id="details-button" data-film-id="${movie.id}">Détails</button>
                 </div>
             </div> 
             `;
@@ -267,6 +267,39 @@ async function showMovieDetailByCategory(selectedCategory) {
         console.log("Erreur lors de la récupération des films : ", error);
     }
 }
+
+// La gestion de bouton "Voir plus/Voir moins"
+document.querySelectorAll('.show-more-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        let movieGrid = this.previousElementSibling; // Sélectionne la grille de films juste avant le bouton
+        let movies = movieGrid.querySelectorAll('.movie-item');
+        let defaultVisibleMovies = 2;
+
+        if (window.innerWidth >= 768 && window.innerWidth < 1024){
+            defaultVisibleMovies = 4;
+        } else if (window.innerWidth >= 1024) {
+            defaultVisibleMovies = movies.length;
+        }
+
+        if (this.innerText === "Voir plus") {
+            // Cas "Voir plus" : Afficher les films cachés
+            movies.forEach((movie, index) => {
+                if (index >= defaultVisibleMovies) { // On affiche les films à partir du 3ème
+                    movie.style.display = 'block';
+                }
+            });
+            this.innerText = "Voir moins"; // Changer le texte en "Voir moins"
+        } else {
+            // Cas "Voir moins" : Revenir à l'affichage par défaut (les deux premiers films)
+            movies.forEach((movie, index) => {
+                if (index >= defaultVisibleMovies) { // Cacher les films à partir du 3ème
+                    movie.style.display = 'none';
+                }
+            });
+            this.innerText = "Voir plus"; // Changer le texte en "Voir plus"
+        }
+    });
+});
 
 // Load the movie once the DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
