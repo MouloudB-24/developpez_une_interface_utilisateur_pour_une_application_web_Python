@@ -5,7 +5,6 @@ const API_URL_BIOGRAPHY_MOVIE = "http://localhost:8000/api/v1/titles/?page_size=
 const API_URL_COMEDY_MOVIE = "http://localhost:8000/api/v1/titles/?page_size=6&genre=Comedy&sort_by=-imdb_score,title"
 const API_URL_CATEGORIES = "http://localhost:8000/api/v1/genres/?page_size=25"
 
-
 // Select the elements from the DOM
 const topMoviesContainer = document.getElementById('top-movies-container');
 const biographyMoviesContainer = document.getElementById('biography-movies-container');
@@ -24,7 +23,7 @@ async function fetchBestMovie() {
     displayBestMovie(movie);
 }
 
-// Fonction pour afficher des données du meilleur film
+// Fonction pour afficher des données de Top film
 function displayBestMovie(movie) {
     const bestMovieDiv = document.querySelector('.best-movie');
     bestMovieDiv.innerHTML +=`
@@ -32,11 +31,11 @@ function displayBestMovie(movie) {
         <div class="details-film">
             <h3>${movie.title}</h3>
             <p>${movie.description}</p>
-            <button class="details-button">Détails</button>
+            <button class="button-top-film">Détails</button>
         </div>
     `;
     // Ajouter un événement click pour afficher la fenêtre modale
-    bestMovieDiv.querySelector('.details-button').addEventListener('click', () => {
+    bestMovieDiv.querySelector('.button-top-film').addEventListener('click', () => {
         openModal(movie);
     });
 
@@ -298,7 +297,7 @@ function resetMovieDisplay() {
 
         // Réinitialiser le texte du bouton "Voir plus/Voir moins"
         let button = movieGrid.nextElementSibling; // Le bouton après la grille
-        if (button && button.classList.contains('show-more-btn')) {
+        if (button && button.classList.contains('details-button')) {
             button.innerText = "Voir plus";
         }
     });

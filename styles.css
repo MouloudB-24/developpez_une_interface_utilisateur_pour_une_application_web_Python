@@ -79,7 +79,7 @@ h1 {
   }
   
   /* Style pour le bouton de détails */
-  .details-button {
+  .button-top-film, .details-button, .show-more-btn {
     padding: 6px 15px;
     border: none;
     border-radius: 20px;
@@ -88,9 +88,18 @@ h1 {
     cursor: pointer;
     font-size: 14px;
   }
+
+  .button-top-film {
+    margin-left: 40%;
+  }
+
+  .show-more-btn {
+    margin-left: 44%;
+    margin-top: 15px;
+  }
   
   /* Changement de l'opacité du bouton au survol */
-  .details-button:hover {
+  .button-top-film:hover {
     opacity: 0.8;
   }
 
@@ -183,10 +192,6 @@ section {
     margin: 5px 0;
 }
 
-.show-more-btn {
-    margin-top: 10px;
-    margin-left: 44%;
-}
 
 
 /* Styles pour la section des six films les mieux notés */
