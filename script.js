@@ -12,7 +12,7 @@ const biographyMoviesContainer = document.getElementById('biography-movies-conta
 const comedyMoviesContainer = document.getElementById('comedy-movies-container');
 
 
-// 1) Récupération des données du meilleur film 
+//                      ------------------------------ TOP FILM ------------------------------  
 // Fonction pour faire la requête vers l'URL de API
 async function fetchBestMovie() {
     const response = await fetch(API_URL_BEST_MOVIE);
@@ -47,7 +47,7 @@ function displayBestMovie(movie) {
 
 window.onload = fetchBestMovie;
 
-// 2) Récupérer les données des meilleurs films 
+//                      ------------------------------ TOP 6 FIMLS ------------------------------ 
 // Fonction pour afficher les films dans une section dédiée
 function displayTopMovies(movieDataArr) {
     movieDataArr.forEach(movie => {
@@ -66,9 +66,7 @@ function displayTopMovies(movieDataArr) {
     setupEventListenersForMovies()
 }
 
-
-
-// 3) Retrieve data for the best Biography movies 
+// ----------------------------------------- TOP BIOGRAPHY MOVIES ------------------------------------------- 
 // Create an empty array to store movies data
 let biographyMovieDataArr = [];
 
@@ -91,7 +89,7 @@ function displayBiographyMovies(biographyMovieDataArr) {
 }
 
 
-// 4) Retrieve data for the best Comedy movies 
+// ---------------------------------------- TOP COMEDY MOVIES ------------------------------------------------ 
 // Create an empty array to store movies data
 let comedyMovieDataArr = [];
 
@@ -113,6 +111,7 @@ function displayComedyMovies(comedyMovieDataArr) {
     setupEventListenersForMovies()
 }
 
+// ---------------------------------------- FONCTIONS COMMON ------------------------------------------------ 
 function setupEventListenersForMovies() {
     const images = document.querySelectorAll('.movie-img');
     const detailButtons = document.querySelectorAll('.details-button');
@@ -268,6 +267,38 @@ async function showMovieDetailByCategory(selectedCategory) {
     }
 }
 
+// Fonction pour réinitialiser l'affichage des films en fonction de la taille d'écran
+function resetMovieDisplay() {
+    document.querySelectorAll('.movies-grid').forEach(movieGrid => {
+        let movies = movieGrid.querySelectorAll('.movie-item');
+        let defaultVisibleMovies;
+
+        // Appliquer le nombre de films à afficher selon la taille de l'écran
+        if (window.innerWidth >= 1024) {
+            defaultVisibleMovies = movies.length;
+        } else if (window.innerWidth >= 768 && window.innerWidth < 1024) {
+            defaultVisibleMovies = 4;
+        } else {
+            defaultVisibleMovies = 2;
+        }
+
+        // Cacher tous les films au-delà du nombre par défaut
+        movies.forEach((movie, index) => {
+            if (index >= defaultVisibleMovies) {
+                movie.style.display = 'none';
+            } else {
+                movie.style.display = 'block';
+            }
+        });
+
+        // Réinitialiser le texte du bouton "Voir plus/Voir moins"
+        let button = movieGrid.nextElementSibling; // Le bouton après la grille
+        if (button && button.classList.contains('show-more-btn')) {
+            button.innerText = "Voir plus";
+        }
+    });
+}
+
 // La gestion de bouton "Voir plus/Voir moins"
 document.querySelectorAll('.show-more-btn').forEach(button => {
     button.addEventListener('click', function() {
@@ -282,23 +313,26 @@ document.querySelectorAll('.show-more-btn').forEach(button => {
         }
 
         if (this.innerText === "Voir plus") {
-            // Cas "Voir plus" : Afficher les films cachés
             movies.forEach((movie, index) => {
-                if (index >= defaultVisibleMovies) { // On affiche les films à partir du 3ème
+                if (index >= defaultVisibleMovies) {
                     movie.style.display = 'block';
                 }
             });
-            this.innerText = "Voir moins"; // Changer le texte en "Voir moins"
+            this.innerText = "Voir moins"; 
         } else {
-            // Cas "Voir moins" : Revenir à l'affichage par défaut (les deux premiers films)
             movies.forEach((movie, index) => {
-                if (index >= defaultVisibleMovies) { // Cacher les films à partir du 3ème
+                if (index >= defaultVisibleMovies) {
                     movie.style.display = 'none';
                 }
             });
-            this.innerText = "Voir plus"; // Changer le texte en "Voir plus"
+            this.innerText = "Voir plus";
         }
     });
+});
+
+// Réinitialiser l'affichage des films lors du redimensionnement de la fenêtre
+window.addEventListener('resize', function() {
+    resetMovieDisplay();
 });
 
 // Load the movie once the DOM is ready
@@ -307,4 +341,5 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchMovies(API_URL_BIOGRAPHY_MOVIE, displayBiographyMovies);
     fetchMovies(API_URL_COMEDY_MOVIE, displayComedyMovies);
     fetchCategories();
+    resetMovieDisplay();
 })
