@@ -1,5 +1,4 @@
-
-/* Styles globaux */
+/* Style global */
 body {
     font-family: Arial, sans-serif;
     max-width: 80%;
@@ -195,11 +194,10 @@ section {
 
 
 /* Styles pour la section des six films les mieux notés */
-/* Style pour chaque carte de film */
+/* Toujours afficher les 2 premiers éléments */
 .movie-item {
     display: none;
 }
-/* Toujours afficher les 2 premiers éléments */
 .movie-item:nth-child(-n+2) {
     display: block;
   }
